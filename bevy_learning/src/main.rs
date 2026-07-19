@@ -163,13 +163,12 @@ fn setup(mut commands: Commands) {
 fn worker_ai(
     mut workers_query: Query<(Entity, &mut Worker, &Transform)>,
     mut tiles_query: Query<(Entity, &mut Tile, &mut Sprite, &Transform)>,
-    storage_query: Query<(Entity, &Tile), Without<Worker>>,
 ) {
-    // Find Storage entity
-    let storage_entity = storage_query
+    // Find Storage entity from our existing tiles_query
+    let storage_entity = tiles_query
         .iter()
-        .find(|(_, tile)| tile.tile_type == TileType::Storage)
-        .map(|(entity, _)| entity);
+        .find(|(_, tile, _, _)| tile.tile_type == TileType::Storage)
+        .map(|(entity, _, _, _)| entity);
 
     for (worker_entity, mut worker, worker_transform) in &mut workers_query {
         let _ = worker_entity; // suppress unused warning
